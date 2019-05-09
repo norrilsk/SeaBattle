@@ -62,6 +62,22 @@ public class Main extends Applet implements MouseListener {
         });
         this.add(random);
 
+
+
+
+        Button clear = new Button("Clear");
+        clear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                user.clearOwnField();
+
+                repaint();
+            }
+        });
+        this.add(clear);
+
+
         Button start = new Button("Start");
         start.addActionListener(new ActionListener() {
             @Override
@@ -70,6 +86,7 @@ public class Main extends Applet implements MouseListener {
                     action = Action.GAME;
                     random.hide();
                     start.hide();
+                    clear.hide();
                 }
 
                 repaint();
@@ -142,12 +159,14 @@ public class Main extends Applet implements MouseListener {
 
             if (!(i > 9 || j > 9 || x < 0 || y < 0)) {
 
+                user.clearSettingield();
 
                 if (i == 0 && j >= 0 && j <= 3) {
                     x_offset_to_place = 0;
                     y_offset_to_place = j;
                     size_to_place = 4;
                     is_hor_to_place = false;
+                    user.getSettingField().set(i,j,State.DAMAGED);
                 }
 
                 if (j == 9 && i >= 0 && i <= 3) {
@@ -155,18 +174,21 @@ public class Main extends Applet implements MouseListener {
                     y_offset_to_place = 0;
                     size_to_place = 4;
                     is_hor_to_place = true;
+                    user.getSettingField().set(i,j,State.DAMAGED);
                 }
                 if (i == 2 && j >= 1 && j <= 3) {
                     x_offset_to_place = 0;
                     y_offset_to_place = j - 1;
                     size_to_place = 3;
                     is_hor_to_place = false;
+                    user.getSettingField().set(i,j,State.DAMAGED);
                 }
                 if (j == 7 && i >= 0 && i <= 2) {
                     x_offset_to_place = i;
                     y_offset_to_place = 0;
                     size_to_place = 3;
                     is_hor_to_place = true;
+                    user.getSettingField().set(i,j,State.DAMAGED);
                 }
 
                 if (i == 4 && j >= 2 && j <= 3) {
@@ -174,12 +196,14 @@ public class Main extends Applet implements MouseListener {
                     y_offset_to_place = j -2 ;
                     size_to_place = 2;
                     is_hor_to_place = false;
+                    user.getSettingField().set(i,j,State.DAMAGED);
                 }
                 if (j == 5 && i >= 0 && i <= 1) {
                     x_offset_to_place = i;
                     y_offset_to_place = 0;
                     size_to_place = 2;
                     is_hor_to_place = true;
+                    user.getSettingField().set(i,j,State.DAMAGED);
                 }
 
                 if (i == 6 && j == 3) {
@@ -187,7 +211,9 @@ public class Main extends Applet implements MouseListener {
                     y_offset_to_place = 0;
                     size_to_place = 1;
                     is_hor_to_place = false;
+                    user.getSettingField().set(i,j,State.DAMAGED);
                 }
+                repaint();
             }
 
             my_x -= user.getOwnField().getStart_x_px();
@@ -196,6 +222,10 @@ public class Main extends Applet implements MouseListener {
             int my_offset_px    = user.getOwnField().getOffset_px();
             int my_i = my_x / (cell_size_px + offset_px);
             int my_j = my_y / (cell_size_px + offset_px);
+
+            if (size_to_place <1){
+                return;
+            }
 
             if (!(my_i > 9 || my_j > 9 || my_x < 0 || my_y < 0)) {
                 Ship ship = new Ship(my_i - x_offset_to_place,my_j - y_offset_to_place,is_hor_to_place,size_to_place);

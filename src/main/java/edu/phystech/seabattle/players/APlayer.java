@@ -45,6 +45,10 @@ public abstract class APlayer {
     {
         ownField.clear();
     }
+    public void clearSettingield()
+    {
+        settingField.clear();
+    }
     public boolean checkField(){
         return ownField.check();
     }
