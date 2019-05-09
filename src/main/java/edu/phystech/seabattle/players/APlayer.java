@@ -19,21 +19,26 @@ public abstract class APlayer {
 
     protected Field ownField;
     protected Field enemyField;
+    protected Field settingField;
     private List<Ship> fakes = new ArrayList<>(8);
 
     public APlayer(Field ownField, Field enemyField) {
         this.ownField = ownField;
         this.enemyField = enemyField;
+        this.settingField = new Field(Rules.GRID_SIZE,enemyField.getStart_x_px(),enemyField.getStart_y_px(),
+                enemyField.getCell_size_px() ,enemyField.getOffset_px());
         int start_x = enemyField.getStart_x_px();
         int start_y= enemyField.getStart_y_px();
         int offset = enemyField.getCell_size_px();
         fakes.add(new Ship(0,0,false,4));
-        fakes.add(new Ship(2 ,3,true,4));
-        fakes.add(new Ship(0,5,false,3));
-        fakes.add(new Ship(2 ,7,true,3));
-        fakes.add(new Ship(0,9,false,2));
-        fakes.add(new Ship(2 ,10,true,2));
-        fakes.add(new Ship(0,12,true,1));
+        fakes.add(new Ship(0 ,9,true,4));
+        fakes.add(new Ship(2,1,false,3));
+        fakes.add(new Ship(0 ,7,true,3));
+        fakes.add(new Ship(4,2,false,2));
+        fakes.add(new Ship(0 ,5,true,2));
+        fakes.add(new Ship(6,3,true,1));
+
+
     }
 
     public void clearOwnField()
@@ -61,6 +66,9 @@ public abstract class APlayer {
 
     public Field getEnemyField() {
         return enemyField;
+    }
+    public Field getSettingField() {
+        return settingField;
     }
 
     private void virusShip(int x, int y, Field field)
@@ -195,6 +203,8 @@ public abstract class APlayer {
             enemyField.draw(graphics);
         }
         if (action == Main.Action.START) {
+
+            settingField.draw(graphics);
             drawShips(graphics);
         }
     }

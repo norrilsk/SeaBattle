@@ -26,6 +26,10 @@ public class Main extends Applet implements MouseListener {
     APlayer user;
     APlayer computer;
     Action action = Action.START;
+    int size_to_place = 0;
+    boolean is_hor_to_place = false;
+    int x_offset_to_place = 0;
+    int y_offset_to_place = 0;
 
     public void addButton(String str){
 
@@ -105,15 +109,14 @@ public class Main extends Applet implements MouseListener {
 
         int x = mouseEvent.getX();
         int y = mouseEvent.getY();
+        int my_x= x;
+        int my_y = y;
 
-        if (action == Action.GAME) {
-            x -= user.getEnemyField().getStart_x_px();
-            y -= user.getEnemyField().getStart_y_px();
-        }
+        x -= user.getEnemyField().getStart_x_px();
+        y -= user.getEnemyField().getStart_y_px();
 
-        if(x < 0 || y < 0){
-            return;
-        }
+
+
 
         int cell_size_px = user.getEnemyField().getCell_size_px();
         int offset_px    = user.getEnemyField().getOffset_px();
@@ -121,8 +124,10 @@ public class Main extends Applet implements MouseListener {
         int i = x / (cell_size_px + offset_px);
         int j = y / (cell_size_px + offset_px);
 
+
+
         if (action == Action.GAME) {
-            if (i > 9 || j > 9){
+            if (i > 9 || j > 9 || x < 0 || y < 0){
                 return;
             }
 
@@ -135,6 +140,70 @@ public class Main extends Applet implements MouseListener {
         }
         if (action == Action.START) {
 
+            if (!(i > 9 || j > 9 || x < 0 || y < 0)) {
+
+
+                if (i == 0 && j >= 0 && j <= 3) {
+                    x_offset_to_place = 0;
+                    y_offset_to_place = j;
+                    size_to_place = 4;
+                    is_hor_to_place = false;
+                }
+
+                if (j == 9 && i >= 0 && i <= 3) {
+                    x_offset_to_place = i;
+                    y_offset_to_place = 0;
+                    size_to_place = 4;
+                    is_hor_to_place = true;
+                }
+                if (i == 2 && j >= 1 && j <= 3) {
+                    x_offset_to_place = 0;
+                    y_offset_to_place = j - 1;
+                    size_to_place = 3;
+                    is_hor_to_place = false;
+                }
+                if (j == 7 && i >= 0 && i <= 2) {
+                    x_offset_to_place = i;
+                    y_offset_to_place = 0;
+                    size_to_place = 3;
+                    is_hor_to_place = true;
+                }
+
+                if (i == 4 && j >= 2 && j <= 3) {
+                    x_offset_to_place = 0;
+                    y_offset_to_place = j -2 ;
+                    size_to_place = 2;
+                    is_hor_to_place = false;
+                }
+                if (j == 5 && i >= 0 && i <= 1) {
+                    x_offset_to_place = i;
+                    y_offset_to_place = 0;
+                    size_to_place = 2;
+                    is_hor_to_place = true;
+                }
+
+                if (i == 6 && j == 3) {
+                    x_offset_to_place = 0;
+                    y_offset_to_place = 0;
+                    size_to_place = 1;
+                    is_hor_to_place = false;
+                }
+            }
+
+            my_x -= user.getOwnField().getStart_x_px();
+            my_y -= user.getOwnField().getStart_y_px();
+            int my_cell_size_px = user.getOwnField().getCell_size_px();
+            int my_offset_px    = user.getOwnField().getOffset_px();
+            int my_i = my_x / (cell_size_px + offset_px);
+            int my_j = my_y / (cell_size_px + offset_px);
+
+            if (!(my_i > 9 || my_j > 9 || my_x < 0 || my_y < 0)) {
+                Ship ship = new Ship(my_i - x_offset_to_place,my_j - y_offset_to_place,is_hor_to_place,size_to_place);
+                if (user.getOwnField().isShipAddable(ship)) {
+                    user.getOwnField().addShip(ship);
+                    repaint();
+                }
+            }
 
         }
 
