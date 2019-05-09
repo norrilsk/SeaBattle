@@ -76,6 +76,15 @@ public class Field {
 
     public void draw(Graphics gr)
     {
+        // draw letter
+        gr.setColor(Color.BLACK);
+        for (int i = 0; i < Rules.GRID_SIZE; i++) {
+            gr.drawString( i+"",start_x_px  -  cell_size_px,start_y_px  + (i + 1)*(cell_size_px + offset_px) - cell_size_px/3);
+        }
+        for (int i = 0; i < Rules.GRID_SIZE; i++) {
+            gr.drawString( (char)('a' + i) + "",start_x_px  + (i + 1)*(cell_size_px + offset_px) - 2*cell_size_px/3 ,start_y_px  -  cell_size_px/3);
+        }
+
         //draw grid
         gr.setColor(new Color(135, 206, 250));
         gr.fillRect(start_x_px - offset_px, start_y_px - offset_px,

@@ -39,8 +39,8 @@ public class Main extends Applet implements MouseListener {
     public void init() {
         assert(1==0);
         super.init();
-        user = User.newInstance(20,20);
-        computer = Computer.newInstance(20, 300);
+        user = User.newInstance(40,40);
+        computer = Computer.newInstance(40, 300);
 
 
 
@@ -114,7 +114,7 @@ public class Main extends Applet implements MouseListener {
 
         System.out.println("PAINT");
         this.user.paint(graphics,action);
-        this.computer.paint(graphics,action);
+        //this.computer.paint(graphics,action);
 
 
     }
