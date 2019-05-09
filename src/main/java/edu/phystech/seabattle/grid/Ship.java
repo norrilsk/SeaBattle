@@ -45,6 +45,7 @@ public class Ship {
         int height = horizontal ? 1:length;
         int width = !horizontal ? 1:length;
 
+        gr.setColor(Color.BLACK);
         ((Graphics2D)gr).setStroke(new BasicStroke(offset_px * 2));
 
         gr.drawRect(start_x_px + (cell_size_px + offset_px)*this.x -offset_px,

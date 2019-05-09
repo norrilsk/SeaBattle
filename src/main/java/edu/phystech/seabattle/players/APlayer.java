@@ -1,5 +1,6 @@
 package edu.phystech.seabattle.players;
 
+import edu.phystech.seabattle.Main;
 import edu.phystech.seabattle.Rules;
 import edu.phystech.seabattle.grid.Field;
 import edu.phystech.seabattle.grid.Ship;
@@ -8,6 +9,8 @@ import edu.phystech.seabattle.grid.State;
 
 import java.awt.*;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static edu.phystech.seabattle.grid.State.*;
@@ -16,12 +19,40 @@ public abstract class APlayer {
 
     protected Field ownField;
     protected Field enemyField;
+    private List<Ship> fakes = new ArrayList<>(8);
 
     public APlayer(Field ownField, Field enemyField) {
         this.ownField = ownField;
         this.enemyField = enemyField;
+        int start_x = enemyField.getStart_x_px();
+        int start_y= enemyField.getStart_y_px();
+        int offset = enemyField.getCell_size_px();
+        fakes.add(new Ship(0,0,false,4));
+        fakes.add(new Ship(2 ,3,true,4));
+        fakes.add(new Ship(0,5,false,3));
+        fakes.add(new Ship(2 ,7,true,3));
+        fakes.add(new Ship(0,9,false,2));
+        fakes.add(new Ship(2 ,10,true,2));
+        fakes.add(new Ship(0,12,true,1));
     }
 
+    public void clearOwnField()
+    {
+        ownField.clear();
+    }
+    public boolean checkField(){
+        return ownField.check();
+    }
+    private  void drawShips(Graphics graphics){
+        int start_x = enemyField.getStart_x_px();
+        int start_y= enemyField.getStart_y_px();
+        int cell_size = enemyField.getCell_size_px();
+        int offset = enemyField.getOffset_px();
+        for (int i = 0; i < fakes.size(); i++) {
+            fakes.get(i).draw(graphics,start_x,start_y,cell_size,offset);
+        }
+
+    }
 
 
     public Field getOwnField() {
@@ -158,9 +189,14 @@ public abstract class APlayer {
         throw new Exception("Unable to set ships");
     }
 
-    public void paint(Graphics graphics) {
+    public void paint(Graphics graphics , Main.Action action) {
         ownField.draw(graphics);
-        enemyField.draw(graphics);
+        if(action == Main.Action.GAME) {
+            enemyField.draw(graphics);
+        }
+        if (action == Main.Action.START) {
+            drawShips(graphics);
+        }
     }
 
     public void randomFill() throws Exception {

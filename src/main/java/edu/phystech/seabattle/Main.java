@@ -18,8 +18,18 @@ import java.util.Random;
 
 public class Main extends Applet implements MouseListener {
 
+    public enum Action
+    {
+        START,
+        GAME;
+    }
     APlayer user;
     APlayer computer;
+    Action action = Action.START;
+
+    public void addButton(String str){
+
+    }
 
     @Override
     public void init() {
@@ -28,8 +38,43 @@ public class Main extends Applet implements MouseListener {
         user = User.newInstance(20,20);
         computer = Computer.newInstance(20, 300);
 
+
+
+        Button random = new Button("Random");
+        random.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                user.clearOwnField();
+                try {
+                    user.randomFill();
+                    //computer.randomFill();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.exit(-1);
+                }
+                repaint();
+            }
+        });
+        this.add(random);
+
+        Button start = new Button("Start");
+        start.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (user.checkField()) {
+                    action = Action.GAME;
+                    random.hide();
+                    start.hide();
+                }
+
+                repaint();
+            }
+        });
+        this.add(start);
+
         try {
-            user.randomFill();
+            //user.randomFill();
             computer.randomFill();
 
         } catch (Exception e) {
@@ -45,9 +90,10 @@ public class Main extends Applet implements MouseListener {
 
     @Override
     public void paint(Graphics graphics) {
+
         System.out.println("PAINT");
-        this.user.paint(graphics);
-        this.computer.paint(graphics);
+        this.user.paint(graphics,action);
+        this.computer.paint(graphics,action);
 
 
     }
@@ -56,11 +102,14 @@ public class Main extends Applet implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
 
+
         int x = mouseEvent.getX();
         int y = mouseEvent.getY();
 
-        x -= user.getEnemyField().getStart_x_px();
-        y -= user.getEnemyField().getStart_y_px();
+        if (action == Action.GAME) {
+            x -= user.getEnemyField().getStart_x_px();
+            y -= user.getEnemyField().getStart_y_px();
+        }
 
         if(x < 0 || y < 0){
             return;
@@ -72,14 +121,21 @@ public class Main extends Applet implements MouseListener {
         int i = x / (cell_size_px + offset_px);
         int j = y / (cell_size_px + offset_px);
 
-        if (i > 9 || j > 9){
-            return;
-        }
+        if (action == Action.GAME) {
+            if (i > 9 || j > 9){
+                return;
+            }
 
-        try {
-            shoot(i, j);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            try {
+                shoot(i, j);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (action == Action.START) {
+
+
         }
 
 //

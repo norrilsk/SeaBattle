@@ -4,6 +4,7 @@ import edu.phystech.seabattle.Rules;
 import edu.phystech.seabattle.utils.Pair;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,7 +102,7 @@ public class Field {
             }
         }
         //draw ships
-        gr.setColor(Color.BLACK);
+
         for (int i = 0; i < ships.size(); i++) {
             Ship s = ships.get(i);
             s.draw(gr, start_x_px, start_y_px, cell_size_px, offset_px);
@@ -136,7 +137,26 @@ public class Field {
             }
         }
     }
-
+    public boolean check() {
+        int[] test = new int[Rules.GRID_SIZE+1];
+        for(int i = 0; i <ships.size(); i++){
+            test[ships.get(i).getLength()]++;
+        }
+        for(int i = 0; i <Rules.SHIPS.length; i++){
+            int size = Rules.SHIPS[i][0];
+            int count = Rules.SHIPS[i][1];
+            if (test[size]!= count) {
+                return false;
+            }
+            test[size] = 0;
+        }
+        for (int i = 0; i < test.length; i++) {
+            if (test[i]!= 0){
+                return false;
+            }
+        }
+        return true;
+    }
     public void addShip(Ship ship){
         this.ships.add(ship);
         int x = ship.getX();
