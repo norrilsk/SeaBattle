@@ -20,6 +20,38 @@ public class Field {
     private int start_x_px;
     private int start_y_px;
 
+    public int getCell_size_px() {
+        return cell_size_px;
+    }
+
+    public int getOffset_px() {
+        return offset_px;
+    }
+
+    public int getGrid_size() {
+        return grid_size;
+    }
+
+    public State[][] getGrid() {
+        return grid;
+    }
+
+    public int getStart_x_px() {
+        return start_x_px;
+    }
+
+    public int getStart_y_px() {
+        return start_y_px;
+    }
+
+    public List<Ship> getShips() {
+        return ships;
+    }
+
+    public Map<Pair, Ship> getShipMap() {
+        return shipMap;
+    }
+
     private List<Ship> ships = new ArrayList<>(10);
     private Map<Pair, Ship> shipMap = new HashMap<>();
 

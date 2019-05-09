@@ -23,6 +23,15 @@ public abstract class APlayer {
     }
 
 
+
+    public Field getOwnField() {
+        return ownField;
+    }
+
+    public Field getEnemyField() {
+        return enemyField;
+    }
+
     private void virusShip(int x, int y, Field field)
     {
         field.set(x,y,KILLED);
@@ -59,7 +68,7 @@ public abstract class APlayer {
         }
 
     }
-    public void shoot(int x, int y, APlayer enemy) throws Exception {
+    public State shoot(int x, int y, APlayer enemy) throws Exception {
         State state =  enemy.getShoot(x,y);
         switch (state){
             case MISSED:{
@@ -75,7 +84,11 @@ public abstract class APlayer {
                 break;
             }
         }
+        return enemyField.get(x,y);
     }
+
+    public abstract State smartShoot(APlayer enemy) throws Exception;
+
 
     public State getShoot(int x, int y) throws Exception {
         State current = ownField.get(x, y);
@@ -103,7 +116,7 @@ public abstract class APlayer {
                 }
             }
         }
-        throw new Exception("UNEXPECTED BEHAVIOUR");
+        throw new Exception("UNEXPECTED BEHAVIOUR" + this.getClass());
     }
 
 
@@ -148,5 +161,9 @@ public abstract class APlayer {
     public void paint(Graphics graphics) {
         ownField.draw(graphics);
         enemyField.draw(graphics);
+    }
+
+    public void randomFill() throws Exception {
+        APlayer.fillField(ownField);
     }
 }

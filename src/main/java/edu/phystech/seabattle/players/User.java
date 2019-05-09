@@ -2,10 +2,16 @@ package edu.phystech.seabattle.players;
 
 import edu.phystech.seabattle.Rules;
 import edu.phystech.seabattle.grid.Field;
+import edu.phystech.seabattle.grid.State;
 
 public class User extends APlayer {
     private User(Field ownField, Field enemyField) {
         super(ownField, enemyField);
+    }
+
+    @Override
+    public State smartShoot(APlayer enemy) throws Exception {
+        return null;
     }
 
     public static User newInstance(int x, int y) {
@@ -14,7 +20,5 @@ public class User extends APlayer {
         return new User(ownField, enemyField);
     }
 
-    public void randomFill() throws Exception {
-        APlayer.fillField(ownField);
-    }
+
 }
