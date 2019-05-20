@@ -9,7 +9,7 @@ import edu.phystech.seabattle.players.User;
 
 import java.applet.Applet;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -21,8 +21,10 @@ public class Main extends Applet implements MouseListener {
     public enum Action
     {
         START,
-        GAME;
+        GAME,
+        FINISH
     }
+    String winner = "";
     APlayer user;
     APlayer computer;
     Action action = Action.START;
@@ -37,7 +39,7 @@ public class Main extends Applet implements MouseListener {
 
     @Override
     public void init() {
-        assert(1==0);
+
         super.init();
         user = User.newInstance(40,40);
         computer = Computer.newInstance(40, 300);
@@ -60,6 +62,7 @@ public class Main extends Applet implements MouseListener {
                 repaint();
             }
         });
+
         this.add(random);
 
 
@@ -102,7 +105,6 @@ public class Main extends Applet implements MouseListener {
             e.printStackTrace();
             System.exit(-1);
         }
-
         this.addMouseListener(this);
 
     }
@@ -113,7 +115,17 @@ public class Main extends Applet implements MouseListener {
     public void paint(Graphics graphics) {
 
         System.out.println("PAINT");
-        this.user.paint(graphics,action);
+
+
+        if(action == Action.FINISH) {
+            graphics.setColor(Color.BLACK);
+            graphics.drawString("GAME OVER",200,200);
+            graphics.drawString(winner +" WINS",200,250);
+
+        }
+        else{
+            this.user.paint(graphics,action);
+        }
         //this.computer.paint(graphics,action);
 
 
@@ -254,9 +266,20 @@ public class Main extends Applet implements MouseListener {
         State state = user.shoot(i, j, computer);
         repaint();
 
+        if (user.getEnemyField().getKilled() >= 20) {
+            System.out.println("User WIN");
+            winner = "USER";
+            action = Action.FINISH;
+            this.paint(getGraphics());
+
+            repaint();
+            return;
+        }
+
         if(state != State.MISSED){
             return;
         }
+
 
         State computerState = null;
         do{
@@ -265,7 +288,17 @@ public class Main extends Applet implements MouseListener {
             System.out.println("COMP SHOOT : " + computerState);
 
             repaint();
+            if (user.getOwnField().getKilled() >= 20) {
+                action = Action.FINISH;
+                winner = "COMPUTER";
+                System.out.println("Comp WIN");
+                this.paint(getGraphics());
+                repaint();
+                return;
+            }
         }while (computerState != State.MISSED);
+
+
 
     }
 

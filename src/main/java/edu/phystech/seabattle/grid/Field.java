@@ -20,7 +20,7 @@ public class Field {
     private  State[][] grid;
     private int start_x_px;
     private int start_y_px;
-
+    private int killed = 0;
     public int getCell_size_px() {
         return cell_size_px;
     }
@@ -44,7 +44,9 @@ public class Field {
     public int getStart_y_px() {
         return start_y_px;
     }
-
+    public int getKilled(){
+        return killed;
+    }
     public List<Ship> getShips() {
         return ships;
     }
@@ -67,6 +69,9 @@ public class Field {
     }
 
     public void set(int i, int j, State state){
+        if (state == KILLED){
+            killed++;
+        }
         this.grid[i][j] = state;
     }
 
@@ -217,6 +222,7 @@ public class Field {
             }
         }
         ships.clear();
+        killed = 0;
     }
 
     public Ship getShip(int x, int y){
